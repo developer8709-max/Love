@@ -39,4 +39,3 @@ Click here to experience it:
 
 ---
 
-## 📁 Project Structure
