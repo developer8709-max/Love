@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do You Love Me? 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    height:100vh;
+    background:radial-gradient(circle at top,#1a001a,#000);
+    overflow:hidden;
+    font-family:'Poppins',sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+.heart{
+    position:absolute;
+    bottom:-20px;
+    color:#ff4d6d;
+    animation:floatUp linear infinite;
+    opacity:0.8;
+}
+
+@keyframes floatUp{
+    100%{ transform:translateY(-110vh) scale(1.5); opacity:0;}
+}
+
+.letter{
+    position:absolute;
+    right:-500px;
+    width:90%;
+    max-width:420px;
+    padding:30px 20px;
+    border-radius:25px;
+    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.07);
+    box-shadow:0 0 40px rgba(255,0,100,0.7);
+    text-align:center;
+    transition:1.8s ease;
+}
+
+.show{
+    right:50%;
+    transform:translateX(50%);
+}
+
+h1{
+    font-family:'Great Vibes',cursive;
+    font-size:32px;
+    color:#ff4d6d;
+}
+
+.buttons{margin-top:20px;position:relative;}
+
+button{
+    padding:10px 25px;
+    border:none;
+    border-radius:30px;
+    font-size:14px;
+    margin:5px;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+.yes{background:#ff1744;color:white;}
+.no{background:#333;color:white;}
+
+button:hover{transform:scale(1.1);}
+
+#loveMsg{
+    display:none;
+    margin-top:15px;
+}
+
+#emotion{
+    margin-top:15px;
+    font-size:14px;
+    color:#ffd1dc;
+    min-height:30px;
+}
+
+.firework{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:gold;
+    border-radius:50%;
+    animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+    to{
+        transform:translate(var(--x),var(--y));
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" preload="auto" loop>
+    <source src="romantic.mp3" type="audio/mpeg">
+</audio>
+
+<div class="letter" id="letter">
+    <h1 id="mainQuestion">Do You Love Me Baby? 💖</h1>
+
+    <div class="buttons" id="buttons">
+        <button class="yes" onclick="yesClick()">Yes 💕</button>
+        <button class="no" id="noBtn">No 😜</button>
+    </div>
+
+    <div id="loveMsg">
+        <h1>Thank You My Love ❤️</h1>
+        <p>Loving you is the most beautiful feeling in the world.  
+            You are my happiness, my strength, and my forever.  
+            Every heartbeat whispers your name. 🌹✨
+        </p>
+    </div>
+
+    <div id="emotion"></div>
+</div>
+
+<script>
+
+/* Slide letter */
+setTimeout(()=>{
+    document.getElementById("letter").classList.add("show");
+},2000);
+
+/* Floating hearts */
+function createHeart(){
+    const heart=document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML="❤";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(Math.random()*20+10)+"px";
+    heart.style.animationDuration=(Math.random()*4+3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),7000);
+}
+setInterval(createHeart,400);
+
+/* YES CLICK */
+function yesClick(){
+    document.getElementById("mainQuestion").style.display="none";
+    document.getElementById("loveMsg").style.display="block";
+    document.getElementById("buttons").style.display="none";
+    document.getElementById("bgMusic").play().catch(()=>{});
+    createFireworks();
+}
+
+/* NO BUTTON LOGIC */
+const noBtn=document.getElementById("noBtn");
+const emotion=document.getElementById("emotion");
+
+const messages=[
+"Why are you trying to press NO? 😢",
+"My heart is getting scared 💔",
+"Please don't do this 🥺",
+"I only want your love 💞",
+"You're everything to me ❤️",
+"You can't escape my love 😜"
+];
+
+let clickCount=0;
+
+function showEmotion(){
+    if(clickCount < messages.length){
+        emotion.innerText=messages[clickCount];
+        clickCount++;
+    }
+}
+
+function moveNoButton(){
+    const container=document.querySelector(".letter");
+    const rect=container.getBoundingClientRect();
+    const maxX=rect.width-noBtn.offsetWidth-20;
+    const maxY=rect.height-noBtn.offsetHeight-20;
+
+    noBtn.style.position="absolute";
+    noBtn.style.left=Math.random()*maxX+"px";
+    noBtn.style.top=Math.random()*maxY+"px";
+}
+
+/* Show message THEN move */
+noBtn.addEventListener("mouseenter",()=>{
+    showEmotion();
+    moveNoButton();
+});
+
+/* Mobile support */
+noBtn.addEventListener("touchstart",(e)=>{
+    e.preventDefault();
+    showEmotion();
+    moveNoButton();
+});
+
+/* Fireworks */
+function createFireworks(){
+    createBurst("50%","50%");
+    createBurst("0%","100%");
+    createBurst("100%","100%");
+}
+
+function createBurst(xPos,yPos){
+    for(let i=0;i<60;i++){
+        const fw=document.createElement("div");
+        fw.classList.add("firework");
+        fw.style.left=xPos;
+        fw.style.top=yPos;
+        fw.style.setProperty('--x',(Math.random()*400-200)+'px');
+        fw.style.setProperty('--y',(Math.random()*-400)+'px');
+        document.body.appendChild(fw);
+        setTimeout(()=>fw.remove(),1000);
+    }
+}
+
+</script>
+
+</body>
+</html>
